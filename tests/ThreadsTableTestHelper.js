@@ -1,6 +1,6 @@
+/* istanbul ignore file */
 const pool = require('../src/Infrastructures/database/postgres/pool');
 
-/* istanbul ignore file */
 const ThreadsTableTestHelper = {
   async addThread({
     id = 'thread-123', title = 'Thread Title', body = 'Thread body', owner = 'user-123',
