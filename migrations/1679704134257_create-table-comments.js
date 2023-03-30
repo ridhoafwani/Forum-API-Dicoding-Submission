@@ -22,7 +22,7 @@ exports.up = (pgm) => {
       references: 'users(id)',
       onDelete: 'CASCADE',
     },
-    id_delete: {
+    is_delete: {
       type: 'BOOLEAN',
       notNull: true,
       defaultValue: false,
