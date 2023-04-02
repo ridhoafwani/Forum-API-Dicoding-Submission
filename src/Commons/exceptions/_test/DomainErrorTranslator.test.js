@@ -19,6 +19,10 @@ describe('DomainErrorTranslator', () => {
       .toStrictEqual(new InvariantError('tidak dapat menambahkan commentar karena properti yang dibutuhkan tidak ada'));
     expect(DomainErrorTranslator.translate(new Error('ADD_COMMENT.DID_NOT_MEET_DATA_TYPE_SPECIFICATION')))
       .toStrictEqual(new InvariantError('tidak dapat mmenambahkan commentar karena tipe data tidak sesuai'));
+    expect(DomainErrorTranslator.translate(new Error('ADD_REPLY.DID_NOT_CONTAIN_NEEDED_PROPERTY')))
+      .toStrictEqual(new InvariantError('tidak dapat melakukan aksi karena properti yang dibutuhkan tidak ada'));
+    expect(DomainErrorTranslator.translate(new Error('ADD_REPLY.DID_NOT_MEET_DATA_TYPE_SPECIFICATION')))
+      .toStrictEqual(new InvariantError('tidak dapat melakukan aksi karena tipe data yang dibutuhkan tidak sesuai'));
   });
 
   it('should return original error when error message is not needed to translate', () => {

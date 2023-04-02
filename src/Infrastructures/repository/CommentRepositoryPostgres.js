@@ -26,15 +26,15 @@ class CommentRepositoryPostgres extends CommentRepository {
     return new AddedComment({ ...result.rows[0] });
   }
 
-  async checkComment(comment) {
+  async checkComment(comment, thread) {
     const query = {
-      text: 'SELECT id FROM comments WHERE id = $1',
-      values: [comment],
+      text: 'SELECT id FROM comments WHERE id = $1 AND thread = $2',
+      values: [comment, thread],
     };
 
     const result = await this._pool.query(query);
     if (!result.rowCount) {
-      throw new NotFoundError('Komentar tidak ditemukan');
+      throw new NotFoundError('resources tidak ditemukan');
     }
   }
 
