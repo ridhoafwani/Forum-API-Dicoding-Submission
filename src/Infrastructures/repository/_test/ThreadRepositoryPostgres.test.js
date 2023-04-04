@@ -60,7 +60,7 @@ describe('ThreadRepositoryPostgres', () => {
     });
   });
 
-  describe('getThreadById function', () => {
+  describe('getThread function', () => {
     it('should get thread correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'ridho' });
@@ -74,7 +74,7 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action
-      const thread = await threadRepositoryPostgres.getThreadById(threadPayload.id);
+      const thread = await threadRepositoryPostgres.getThread(threadPayload.id);
 
       // Assert
       expect(thread.id).toEqual(threadPayload.id);
