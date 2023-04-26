@@ -61,6 +61,13 @@ describe('ThreadRepositoryPostgres', () => {
   });
 
   describe('getThread function', () => {
+    it('should throw error when thread not found ', async () => {
+      const threadRepository = new ThreadRepositoryPostgres(pool, {});
+
+      await expect(threadRepository.getThread('notfoundthread'))
+        .rejects.toThrow(NotFoundError);
+    });
+
     it('should get thread correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'ridho' });
@@ -80,7 +87,8 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.id).toEqual(threadPayload.id);
       expect(thread.title).toEqual(threadPayload.title);
       expect(thread.body).toEqual(threadPayload.body);
-      expect(thread.owner).toEqual(threadPayload.owner);
+      expect(thread.username).toEqual('ridho');
+      expect(thread.date).toBeDefined();
     });
   });
 

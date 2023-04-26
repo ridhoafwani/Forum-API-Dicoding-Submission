@@ -1,6 +1,7 @@
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AddedReply = require('../../Domains/replies/entities/AddedReply');
+const Reply = require('../../Domains/replies/entities/Reply');
 const ReplyRepository = require('../../Domains/replies/ReplyRepository');
 
 class ReplyRepositoryPostgres extends ReplyRepository {
@@ -53,11 +54,26 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async deleteReply(reply) {
     const query = {
-      text: 'DELETE FROM replies WHERE id = $1',
-      values: [reply],
+      text: 'UPDATE replies SET is_deleted = $1 WHERE id = $2',
+      values: [true, reply],
     };
 
     await this._pool.query(query);
+  }
+
+  async getRepliesByThreadId(threadId) {
+    const query = {
+      text: `SELECT replies.id, users.username, replies.created_at, replies.content, replies.is_deleted,
+      replies.comment
+      FROM replies LEFT JOIN comments ON comments.id = replies.comment
+      LEFT JOIN users ON users.id = replies.owner
+      WHERE comments.thread = $1
+      ORDER BY replies.created_at ASC`,
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows.map((reply) => new Reply(reply));
   }
 }
 

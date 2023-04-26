@@ -180,4 +180,88 @@ describe('ReplyRepositoryPostgres', () => {
       expect(RepliesTableTestHelper.isReplyDeleted('reply-123')).toBeTruthy();
     });
   });
+
+  describe('getRepliesByThreadId function', () => {
+    it('should get replies corrrectly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'ridho' });
+      const threadsPayload = [
+        {
+          id: 'thread-123',
+          title: 'Thread Title',
+          body: 'Thread body',
+          owner: 'user-123',
+        },
+        {
+          id: 'thread-234',
+          title: 'Thread Title',
+          body: 'Thread body',
+          owner: 'user-123',
+        },
+      ];
+      await ThreadsTableTestHelper.addThread(threadsPayload[0]);
+      await ThreadsTableTestHelper.addThread(threadsPayload[1]);
+      const commentsPayload = [
+        {
+          id: 'comment-123',
+          content: 'Comment text',
+          thread: 'thread-123',
+          owner: 'user-123',
+        },
+        {
+          id: 'comment-234',
+          content: 'Comment text',
+          thread: 'thread-234',
+          owner: 'user-123',
+        },
+      ];
+
+      await CommentsTableTestHelper.addComment(commentsPayload[0]);
+      await CommentsTableTestHelper.addComment(commentsPayload[1]);
+
+      const repliesPayload = [
+        {
+          id: 'reply-123',
+          comment: 'comment-123',
+          content: 'first reply',
+        },
+        {
+          id: 'reply-456',
+          comment: 'comment-123',
+          content: 'second reply',
+        },
+        {
+          id: 'reply-789',
+          comment: 'comment-234',
+          content: 'different thread reply',
+        },
+      ];
+
+      await RepliesTableTestHelper.addReply(repliesPayload[0]);
+      await RepliesTableTestHelper.addReply(repliesPayload[1]);
+      await RepliesTableTestHelper.addReply(repliesPayload[2]);
+
+      const replyRepository = new ReplyRepositoryPostgres(pool, {});
+
+      // Action
+
+      const replies = await replyRepository.getRepliesByThreadId(threadsPayload[0].id);
+
+      // Assert
+
+      expect(replies).toHaveLength(2);
+      expect(replies[0].content).toEqual(repliesPayload[0].content);
+      expect(replies[1].content).toEqual(repliesPayload[1].content);
+      expect(replies[0].id).toEqual(repliesPayload[0].id);
+      expect(replies[1].id).toEqual(repliesPayload[1].id);
+    });
+
+    it('should return empty array when replies not found', async () => {
+      const replyRepository = new ReplyRepositoryPostgres(pool, {});
+
+      const replies = await replyRepository.getRepliesByThreadId('thread-123');
+
+      expect(replies).toStrictEqual([]);
+    });
+  });
 });

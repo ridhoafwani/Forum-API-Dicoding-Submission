@@ -219,4 +219,71 @@ describe('CommentRepositoryPostgres', () => {
       await expect(CommentsTableTestHelper.isCommentDeleted(commentPayload.id)).toBeTruthy();
     });
   });
+
+  describe('getCommentsByThreadId function', () => {
+    it('should get comments correctly', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123', username: 'ridho' });
+      const threadsPayload = [
+        {
+          id: 'thread-123',
+          title: 'Thread Title',
+          body: 'Thread body',
+          owner: 'user-123',
+        },
+        {
+          id: 'thread-234',
+          title: 'Thread Title',
+          body: 'Thread body',
+          owner: 'user-123',
+        },
+      ];
+      await ThreadsTableTestHelper.addThread(threadsPayload[0]);
+      await ThreadsTableTestHelper.addThread(threadsPayload[1]);
+      const commentsPayload = [
+        {
+          id: 'comment-123',
+          content: 'First comment text',
+          thread: 'thread-123',
+          owner: 'user-123',
+        },
+        {
+          id: 'comment-234',
+          content: 'Comment text',
+          thread: 'thread-234',
+          owner: 'user-123',
+        },
+        {
+          id: 'comment-456',
+          content: 'Second Comment text',
+          thread: 'thread-123',
+          owner: 'user-123',
+        },
+      ];
+
+      await CommentsTableTestHelper.addComment(commentsPayload[0]);
+      await CommentsTableTestHelper.addComment(commentsPayload[1]);
+      await CommentsTableTestHelper.addComment(commentsPayload[2]);
+
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      const comments = await commentRepository.getCommentsByThreadId(threadsPayload[0].id);
+
+      // Assert
+      expect(comments).toHaveLength(2);
+      expect(comments[0].content).toEqual(commentsPayload[0].content);
+      expect(comments[1].content).toEqual(commentsPayload[2].content);
+      expect(comments[0].id).toEqual(commentsPayload[0].id);
+      expect(comments[1].id).toEqual(commentsPayload[2].id);
+    });
+
+    it('should return empty array when comments not found', async () => {
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      const comments = await commentRepository.getCommentsByThreadId('thread-123');
+
+      expect(comments).toStrictEqual([]);
+    });
+  });
 });

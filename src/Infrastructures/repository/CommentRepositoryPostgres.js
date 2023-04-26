@@ -2,6 +2,7 @@ const AuthorizationError = require('../../Commons/exceptions/AuthorizationError'
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
+const Comment = require('../../Domains/comments/entities/Comment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -52,11 +53,25 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async deleteComment(comment) {
     const query = {
-      text: 'UPDATE comments SET is_delete = $1 WHERE id = $2',
+      text: 'UPDATE comments SET is_deleted = $1 WHERE id = $2',
       values: [true, comment],
     };
 
     await this._pool.query(query);
+  }
+
+  async getCommentsByThreadId(threadId) {
+    const query = {
+      text: `SELECT comments.id, users.username, comments.created_at, comments.content, comments.is_deleted
+      FROM comments LEFT JOIN users ON users.id = comments.owner
+      WHERE comments.thread = $1
+      ORDER BY comments.created_at ASC`,
+      values: [threadId],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rows.map((comment) => new Comment(comment));
   }
 }
 

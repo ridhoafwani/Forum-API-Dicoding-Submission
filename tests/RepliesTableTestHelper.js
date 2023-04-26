@@ -27,7 +27,7 @@ const RepliesTableTestHelper = {
 
   async isReplyDeleted(id) {
     const query = {
-      text: 'SELECT id FROM replies WHERE id = $1 AND is_delete = $2',
+      text: 'SELECT id FROM replies WHERE id = $1 AND is_deleted = $2',
       values: [id, true],
     };
 

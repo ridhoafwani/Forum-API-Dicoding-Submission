@@ -27,7 +27,7 @@ const CommentsTableTestHelper = {
 
   async isCommentDeleted(id) {
     const query = {
-      text: 'SELECT id FROM comments WHERE id = $1 AND is_delete = $2',
+      text: 'SELECT id FROM comments WHERE id = $1 AND is_deleted = $2',
       values: [id, true],
     };
 
