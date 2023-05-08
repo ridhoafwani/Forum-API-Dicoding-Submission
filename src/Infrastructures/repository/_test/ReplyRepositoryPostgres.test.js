@@ -5,6 +5,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedReply = require('../../../Domains/replies/entities/AddedReply');
+const Reply = require('../../../Domains/replies/entities/Reply');
 const pool = require('../../database/postgres/pool');
 const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 
@@ -224,16 +225,19 @@ describe('ReplyRepositoryPostgres', () => {
           id: 'reply-123',
           comment: 'comment-123',
           content: 'first reply',
+          createdAt: '2021',
         },
         {
           id: 'reply-456',
           comment: 'comment-123',
           content: 'second reply',
+          createdAt: '2022',
         },
         {
           id: 'reply-789',
           comment: 'comment-234',
           content: 'different thread reply',
+          createdAt: '2023',
         },
       ];
 
@@ -250,10 +254,24 @@ describe('ReplyRepositoryPostgres', () => {
       // Assert
 
       expect(replies).toHaveLength(2);
-      expect(replies[0].content).toEqual(repliesPayload[0].content);
-      expect(replies[1].content).toEqual(repliesPayload[1].content);
-      expect(replies[0].id).toEqual(repliesPayload[0].id);
-      expect(replies[1].id).toEqual(repliesPayload[1].id);
+      expect(replies).toStrictEqual([
+        new Reply({
+          id: repliesPayload[0].id,
+          content: repliesPayload[0].content,
+          comment: repliesPayload[0].comment,
+          username: 'ridho',
+          created_at: repliesPayload[0].createdAt,
+          is_deleted: false,
+        }),
+        new Reply({
+          id: repliesPayload[1].id,
+          content: repliesPayload[1].content,
+          comment: repliesPayload[1].comment,
+          username: 'ridho',
+          created_at: repliesPayload[1].createdAt,
+          is_deleted: false,
+        }),
+      ]);
     });
 
     it('should return empty array when replies not found', async () => {

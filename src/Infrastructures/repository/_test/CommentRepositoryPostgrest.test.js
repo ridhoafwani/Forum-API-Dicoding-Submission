@@ -4,6 +4,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
+const Comment = require('../../../Domains/comments/entities/Comment');
 const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 
@@ -246,18 +247,21 @@ describe('CommentRepositoryPostgres', () => {
           content: 'First comment text',
           thread: 'thread-123',
           owner: 'user-123',
+          createdAt: '2021',
         },
         {
           id: 'comment-234',
           content: 'Comment text',
           thread: 'thread-234',
           owner: 'user-123',
+          createdAt: '2022',
         },
         {
           id: 'comment-456',
           content: 'Second Comment text',
           thread: 'thread-123',
           owner: 'user-123',
+          createdAt: '2023',
         },
       ];
 
@@ -272,10 +276,22 @@ describe('CommentRepositoryPostgres', () => {
 
       // Assert
       expect(comments).toHaveLength(2);
-      expect(comments[0].content).toEqual(commentsPayload[0].content);
-      expect(comments[1].content).toEqual(commentsPayload[2].content);
-      expect(comments[0].id).toEqual(commentsPayload[0].id);
-      expect(comments[1].id).toEqual(commentsPayload[2].id);
+      expect(comments).toStrictEqual([
+        new Comment({
+          id: commentsPayload[0].id,
+          username: 'ridho',
+          content: commentsPayload[0].content,
+          is_deleted: false,
+          created_at: commentsPayload[0].createdAt,
+        }),
+        new Comment({
+          id: commentsPayload[2].id,
+          username: 'ridho',
+          content: commentsPayload[2].content,
+          is_deleted: false,
+          created_at: commentsPayload[2].createdAt,
+        }),
+      ]);
     });
 
     it('should return empty array when comments not found', async () => {

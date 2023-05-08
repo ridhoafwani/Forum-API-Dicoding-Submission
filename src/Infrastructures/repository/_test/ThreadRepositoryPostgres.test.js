@@ -3,6 +3,7 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const AddThread = require('../../../Domains/threads/entities/AddThread');
+const Thread = require('../../../Domains/threads/entities/Thread');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
@@ -76,6 +77,7 @@ describe('ThreadRepositoryPostgres', () => {
         title: 'Thread Title',
         body: 'Thread body',
         owner: 'user-123',
+        createdAt: '2023',
       };
       await ThreadsTableTestHelper.addThread(threadPayload);
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
@@ -84,11 +86,13 @@ describe('ThreadRepositoryPostgres', () => {
       const thread = await threadRepositoryPostgres.getThread(threadPayload.id);
 
       // Assert
-      expect(thread.id).toEqual(threadPayload.id);
-      expect(thread.title).toEqual(threadPayload.title);
-      expect(thread.body).toEqual(threadPayload.body);
-      expect(thread.username).toEqual('ridho');
-      expect(thread.date).toBeDefined();
+      expect(thread).toStrictEqual(new Thread({
+        id: threadPayload.id,
+        title: threadPayload.title,
+        body: threadPayload.body,
+        username: 'ridho',
+        created_at: threadPayload.createdAt,
+      }));
     });
   });
 

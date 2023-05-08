@@ -1,7 +1,10 @@
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
+const Comment = require('../../../Domains/comments/entities/Comment');
 const CommentsDetail = require('../../../Domains/comments/entities/CommentsDetail');
 const ReplyRepository = require('../../../Domains/replies/ReplyRepository');
+const Reply = require('../../../Domains/replies/entities/Reply');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
+const Thread = require('../../../Domains/threads/entities/Thread');
 const ThreadDetail = require('../../../Domains/threads/entities/ThreadDetail');
 const GetThreadUseCase = require('../GetThreadUseCase');
 
@@ -35,44 +38,48 @@ describe('GetThreadUseCase', () => {
       threadId: 'thread-123',
     };
 
-    const expectedThread = {
+    const expectedThread = new Thread({
       id: useCasePayload.threadId,
       title: 'Thread Title',
       body: 'Thread text',
-      date: '2023',
+      created_at: '2023',
       username: 'dicoding',
-    };
+    });
 
     const expectedComments = [
-      {
+      new Comment({
         id: 'comment-123',
         username: 'dicoding',
-        date: '2023',
-        content: '**komentar telah dihapus**',
-      },
-      {
+        content: 'test',
+        is_deleted: true,
+        created_at: '2023',
+      }),
+      new Comment({
         id: 'comment-456',
         username: 'dicoding',
-        date: '2023',
         content: 'Comment text',
-      },
+        is_deleted: false,
+        created_at: '2023',
+      }),
     ];
 
     const expectedReplies = [
-      {
+      new Reply({
         id: 'reply-123',
-        commentId: 'comment-123',
+        comment: 'comment-123',
         username: 'dicoding',
-        date: '2023',
+        created_at: '2023',
         content: 'Reply text',
-      },
-      {
+        is_deleted: false,
+      }),
+      new Reply({
         id: 'reply-456',
-        commentId: 'comment-123',
+        comment: 'comment-123',
         username: 'dicoding',
-        date: '2023',
-        content: '**balasan telah dihapus**',
-      },
+        created_at: '2023',
+        content: 'test',
+        is_deleted: true,
+      }),
     ];
 
     const commentsDetail = new CommentsDetail(
@@ -89,11 +96,49 @@ describe('GetThreadUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.getThread = jest.fn(() => Promise.resolve(expectedThread));
+    mockThreadRepository.getThread = jest.fn(() => Promise.resolve({
+      id: useCasePayload.threadId,
+      title: 'Thread Title',
+      body: 'Thread text',
+      date: '2023',
+      username: 'dicoding',
+    }));
     mockCommentRepository.getCommentsByThreadId = jest
-      .fn(() => Promise.resolve(expectedComments));
+      .fn(() => Promise.resolve(
+        [
+          {
+            id: 'comment-123',
+            username: 'dicoding',
+            date: '2023',
+            content: '**komentar telah dihapus**',
+          },
+          {
+            id: 'comment-456',
+            username: 'dicoding',
+            date: '2023',
+            content: 'Comment text',
+          },
+        ],
+      ));
     mockReplyRepository.getRepliesByThreadId = jest
-      .fn(() => Promise.resolve(expectedReplies));
+      .fn(() => Promise.resolve(
+        [
+          {
+            id: 'reply-123',
+            comment: 'comment-123',
+            username: 'dicoding',
+            date: '2023',
+            content: 'Reply text',
+          },
+          {
+            id: 'reply-456',
+            comment: 'comment-123',
+            username: 'dicoding',
+            date: '2023',
+            content: '**balasan telah dihapus**',
+          },
+        ],
+      ));
 
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
