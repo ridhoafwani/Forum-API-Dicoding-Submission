@@ -77,18 +77,8 @@ describe('CommentsDetail Entities', () => {
         date: commentsPayload[0].created_at,
         content: commentsPayload[0].content,
         replies: [
-          {
-            id: repliesPayload[0].id,
-            content: '**balasan telah dihapus**',
-            date: repliesPayload[0].created_at,
-            username: repliesPayload[0].username,
-          },
-          {
-            id: repliesPayload[1].id,
-            content: repliesPayload[1].content,
-            date: repliesPayload[1].created_at,
-            username: repliesPayload[1].username,
-          },
+          new Reply(repliesPayload[0]),
+          new Reply(repliesPayload[1]),
         ],
       },
       {
@@ -97,12 +87,7 @@ describe('CommentsDetail Entities', () => {
         date: commentsPayload[1].created_at,
         content: commentsPayload[1].content,
         replies: [
-          {
-            id: repliesPayload[2].id,
-            content: repliesPayload[2].content,
-            date: repliesPayload[2].created_at,
-            username: repliesPayload[2].username,
-          },
+          new Reply(repliesPayload[2]),
         ],
       },
     ]);

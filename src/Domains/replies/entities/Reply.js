@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
 class Reply {
+  #comment;
+
   constructor(payload) {
     this._verifyPayload(payload);
     const {
@@ -7,9 +9,13 @@ class Reply {
     } = payload;
     this.id = id;
     this.username = username;
-    this.comment = comment;
+    this.#comment = comment;
     this.date = date;
     this.content = isDeleted ? '**balasan telah dihapus**' : content;
+  }
+
+  get commentId() {
+    return this.#comment;
   }
 
   _verifyPayload({

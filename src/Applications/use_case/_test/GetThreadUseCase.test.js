@@ -96,47 +96,53 @@ describe('GetThreadUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
 
-    mockThreadRepository.getThread = jest.fn(() => Promise.resolve({
-      id: useCasePayload.threadId,
-      title: 'Thread Title',
-      body: 'Thread text',
-      date: '2023',
-      username: 'dicoding',
-    }));
+    mockThreadRepository.getThread = jest.fn(() => Promise.resolve(
+      new Thread({
+        id: useCasePayload.threadId,
+        title: 'Thread Title',
+        body: 'Thread text',
+        created_at: '2023',
+        username: 'dicoding',
+      }),
+    ));
     mockCommentRepository.getCommentsByThreadId = jest
       .fn(() => Promise.resolve(
         [
-          {
+          new Comment({
             id: 'comment-123',
             username: 'dicoding',
-            date: '2023',
-            content: '**komentar telah dihapus**',
-          },
-          {
+            content: 'test',
+            is_deleted: true,
+            created_at: '2023',
+          }),
+          new Comment({
             id: 'comment-456',
             username: 'dicoding',
-            date: '2023',
             content: 'Comment text',
-          },
+            is_deleted: false,
+            created_at: '2023',
+          }),
         ],
       ));
     mockReplyRepository.getRepliesByThreadId = jest
       .fn(() => Promise.resolve(
         [
-          {
+          new Reply({
             id: 'reply-123',
             comment: 'comment-123',
             username: 'dicoding',
-            date: '2023',
+            created_at: '2023',
             content: 'Reply text',
-          },
-          {
+            is_deleted: false,
+          }),
+          new Reply({
             id: 'reply-456',
             comment: 'comment-123',
             username: 'dicoding',
-            date: '2023',
-            content: '**balasan telah dihapus**',
-          },
+            created_at: '2023',
+            content: 'test',
+            is_deleted: true,
+          }),
         ],
       ));
 

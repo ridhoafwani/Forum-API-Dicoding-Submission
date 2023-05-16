@@ -23,19 +23,17 @@ describe('AddReplyUseCase', () => {
     const mockReplyRepository = new ReplyRepository();
     const mockCommentRepository = new CommentRepository();
 
-    mockReplyRepository.addReply = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockAddedReply));
+    mockReplyRepository.addReply = jest.fn(() => Promise.resolve(mockAddedReply));
 
-    mockCommentRepository.checkComment = jest.fn()
-      .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.checkComment = jest.fn(() => Promise.resolve());
 
-    const getReplyUseCase = new AddReplyUseCase({
+    const addReplyUseCase = new AddReplyUseCase({
       replyRepository: mockReplyRepository,
       commentRepository: mockCommentRepository,
     });
 
     // Action
-    const addedReply = await getReplyUseCase.execute(useCasePayload);
+    const addedReply = await addReplyUseCase.execute(useCasePayload);
 
     // Assert
     expect(addedReply).toStrictEqual(new AddedReply({

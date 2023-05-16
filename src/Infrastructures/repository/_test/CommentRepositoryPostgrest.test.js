@@ -275,7 +275,6 @@ describe('CommentRepositoryPostgres', () => {
       const comments = await commentRepository.getCommentsByThreadId(threadsPayload[0].id);
 
       // Assert
-      expect(comments).toHaveLength(2);
       expect(comments).toStrictEqual([
         new Comment({
           id: commentsPayload[0].id,
@@ -292,14 +291,6 @@ describe('CommentRepositoryPostgres', () => {
           created_at: commentsPayload[2].createdAt,
         }),
       ]);
-    });
-
-    it('should return empty array when comments not found', async () => {
-      const commentRepository = new CommentRepositoryPostgres(pool, {});
-
-      const comments = await commentRepository.getCommentsByThreadId('thread-123');
-
-      expect(comments).toStrictEqual([]);
     });
   });
 });

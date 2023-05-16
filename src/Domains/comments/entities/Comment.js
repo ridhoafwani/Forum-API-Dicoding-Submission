@@ -9,6 +9,12 @@ class Comment {
     this.username = username;
     this.date = date;
     this.content = isDeleted ? '**komentar telah dihapus**' : content;
+    this.replies = [];
+  }
+
+  withReplies(replies) {
+    this.replies = replies;
+    return { ...this };
   }
 
   _verifyPayload({

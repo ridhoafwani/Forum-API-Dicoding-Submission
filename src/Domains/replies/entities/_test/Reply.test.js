@@ -44,13 +44,12 @@ describe('Reply entities', () => {
     // Action
 
     const {
-      id, content, comment, date, username,
+      id, content, date, username,
     } = new Reply(payload);
 
     // Assert
     expect(id).toEqual(payload.id);
     expect(content).toEqual(payload.content);
-    expect(comment).toEqual(payload.comment);
     expect(date).toEqual(payload.created_at);
     expect(username).toEqual(payload.username);
   });
@@ -69,13 +68,12 @@ describe('Reply entities', () => {
     // Action
 
     const {
-      id, content, comment, date, username,
+      id, content, date, username,
     } = new Reply(payload);
 
     // Assert
     expect(id).toEqual(payload.id);
     expect(content).toEqual('**balasan telah dihapus**');
-    expect(comment).toEqual(payload.comment);
     expect(date).toEqual(payload.created_at);
     expect(username).toEqual(payload.username);
   });

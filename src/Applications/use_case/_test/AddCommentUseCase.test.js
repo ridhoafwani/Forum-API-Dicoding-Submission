@@ -22,19 +22,17 @@ describe('AddCommentUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
 
-    mockCommentRepository.addComment = jest.fn()
-      .mockImplementation(() => Promise.resolve(mockAddedComment));
+    mockCommentRepository.addComment = jest.fn(() => Promise.resolve(mockAddedComment));
 
-    mockThreadRepository.checkThread = jest.fn()
-      .mockImplementation(() => Promise.resolve());
+    mockThreadRepository.checkThread = jest.fn(() => Promise.resolve());
 
-    const getCommentUseCase = new AddCommentUseCase({
+    const addCommentUseCase = new AddCommentUseCase({
       commentRepository: mockCommentRepository,
       threadRepository: mockThreadRepository,
     });
 
     // Action
-    const addedComment = await getCommentUseCase.execute(useCasePayload);
+    const addedComment = await addCommentUseCase.execute(useCasePayload);
 
     // Assert
     expect(addedComment).toStrictEqual(new AddedComment({

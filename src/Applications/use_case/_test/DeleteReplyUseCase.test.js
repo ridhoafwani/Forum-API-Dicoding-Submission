@@ -13,20 +13,17 @@ describe('DeleteReplyUseCase', () => {
 
     const mockReplyRepository = new ReplyRepository();
 
-    mockReplyRepository.deleteReply = jest.fn()
-      .mockImplementation(() => Promise.resolve());
-    mockReplyRepository.checkReply = jest.fn()
-      .mockImplementation(() => Promise.resolve());
-    mockReplyRepository.verifyReplyOwner = jest.fn()
-      .mockImplementation(() => Promise.resolve());
+    mockReplyRepository.deleteReply = jest.fn(() => Promise.resolve());
+    mockReplyRepository.checkReply = jest.fn(() => Promise.resolve());
+    mockReplyRepository.verifyReplyOwner = jest.fn(() => Promise.resolve());
 
-    const getReplyUseCase = new DeleteReplyUseCase({
+    const deleteReplyUseCase = new DeleteReplyUseCase({
       replyRepository: mockReplyRepository,
     });
 
     // Action
 
-    await getReplyUseCase.execute(useCasePayload);
+    await deleteReplyUseCase.execute(useCasePayload);
 
     // Assert
     expect(mockReplyRepository.verifyReplyOwner)
