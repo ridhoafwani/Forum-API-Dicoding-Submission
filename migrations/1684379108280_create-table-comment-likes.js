@@ -1,20 +1,21 @@
 exports.up = (pgm) => {
   pgm.createTable('comment_likes', {
-    id: {
+    comment_id: {
       type: 'VARCHAR(50)',
-      primaryKey: true,
+      notNull: true,
+      references: 'comments(id)',
+      onDelete: 'CASCADE',
     },
-    user: {
+    user_id: {
       type: 'VARCHAR(50)',
       notNull: true,
       references: 'users(id)',
       onDelete: 'CASCADE',
     },
-    comment: {
-      type: 'VARCHAR(50)',
+    created_at: {
+      type: 'TEXT',
       notNull: true,
-      references: 'comments(id)',
-      onDelete: 'CASCADE',
+      default: pgm.func('current_timestamp'),
     },
   });
 };
