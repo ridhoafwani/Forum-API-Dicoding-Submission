@@ -34,11 +34,12 @@ describe('Comment entities', () => {
       username: 'user-123',
       content: 'comment text',
       is_deleted: false,
+      likes: 1,
     };
 
     // Action
     const {
-      id, date, username, content,
+      id, date, username, content, likeCount,
     } = new Comment(payload);
 
     //   Assert
@@ -46,6 +47,7 @@ describe('Comment entities', () => {
     expect(date).toEqual(payload.created_at);
     expect(username).toEqual(payload.username);
     expect(content).toEqual(payload.content);
+    expect(likeCount).toEqual(1);
   });
 
   it('should create comment object correctly when is_deleted = true', () => {
@@ -56,11 +58,12 @@ describe('Comment entities', () => {
       username: 'user-123',
       content: 'comment text',
       is_deleted: true,
+      likes: 1,
     };
 
     // Action
     const {
-      id, date, username, content,
+      id, date, username, content, likeCount,
     } = new Comment(payload);
 
     //   Assert
@@ -68,5 +71,6 @@ describe('Comment entities', () => {
     expect(date).toEqual(payload.created_at);
     expect(username).toEqual(payload.username);
     expect(content).toEqual('**komentar telah dihapus**');
+    expect(likeCount).toEqual(1);
   });
 });
