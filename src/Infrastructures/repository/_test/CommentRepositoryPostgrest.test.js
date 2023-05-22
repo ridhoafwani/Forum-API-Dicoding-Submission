@@ -1,3 +1,4 @@
+const CommentLikesTableTestHelper = require('../../../../tests/CommentLikesTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
@@ -268,6 +269,7 @@ describe('CommentRepositoryPostgres', () => {
       await CommentsTableTestHelper.addComment(commentsPayload[0]);
       await CommentsTableTestHelper.addComment(commentsPayload[1]);
       await CommentsTableTestHelper.addComment(commentsPayload[2]);
+      await CommentLikesTableTestHelper.likeComment({ comment: 'comment-123' });
 
       const commentRepository = new CommentRepositoryPostgres(pool, {});
 
@@ -282,6 +284,7 @@ describe('CommentRepositoryPostgres', () => {
           content: commentsPayload[0].content,
           is_deleted: false,
           created_at: commentsPayload[0].createdAt,
+          likes: 1,
         }),
         new Comment({
           id: commentsPayload[2].id,
@@ -289,6 +292,7 @@ describe('CommentRepositoryPostgres', () => {
           content: commentsPayload[2].content,
           is_deleted: false,
           created_at: commentsPayload[2].createdAt,
+          likes: 0,
         }),
       ]);
     });

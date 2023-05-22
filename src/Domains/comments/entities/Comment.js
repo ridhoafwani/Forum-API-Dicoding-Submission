@@ -3,12 +3,13 @@ class Comment {
   constructor(payload) {
     this._verifyPayload(payload);
     const {
-      id, username, created_at: date, content, is_deleted: isDeleted,
+      id, username, created_at: date, content, is_deleted: isDeleted, likes,
     } = payload;
     this.id = id;
     this.username = username;
     this.date = date;
     this.content = isDeleted ? '**komentar telah dihapus**' : content;
+    this.likeCount = parseInt(likes, 10);
     this.replies = [];
   }
 

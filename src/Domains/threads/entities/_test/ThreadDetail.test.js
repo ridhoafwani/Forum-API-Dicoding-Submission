@@ -24,6 +24,7 @@ describe('ThreadDetail entities', () => {
       content: 'comment_text',
       created_at: '2023',
       is_deleted: false,
+      likes: 2,
     };
 
     const thread = new Thread(threadPayload);
@@ -48,6 +49,7 @@ describe('ThreadDetail entities', () => {
         username: commentPayload.username,
         date: commentPayload.created_at,
         content: commentPayload.content,
+        likeCount: commentPayload.likes,
         replies: [],
       },
     ]);

@@ -16,6 +16,7 @@ describe('CommentsDetail Entities', () => {
         content: 'comment_text',
         created_at: '2023',
         is_deleted: false,
+        likes: 1,
       },
       {
         id: 'comment-234',
@@ -23,6 +24,7 @@ describe('CommentsDetail Entities', () => {
         content: 'another comment text',
         created_at: '2023',
         is_deleted: false,
+        likes: 1,
       },
 
     ];
@@ -76,6 +78,7 @@ describe('CommentsDetail Entities', () => {
         username: commentsPayload[0].username,
         date: commentsPayload[0].created_at,
         content: commentsPayload[0].content,
+        likeCount: commentsPayload[0].likes,
         replies: [
           new Reply(repliesPayload[0]),
           new Reply(repliesPayload[1]),
@@ -86,6 +89,7 @@ describe('CommentsDetail Entities', () => {
         username: commentsPayload[1].username,
         date: commentsPayload[1].created_at,
         content: commentsPayload[1].content,
+        likeCount: commentsPayload[1].likes,
         replies: [
           new Reply(repliesPayload[2]),
         ],
