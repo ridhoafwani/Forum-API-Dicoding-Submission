@@ -575,7 +575,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
 
       // Action
       const response = await server.inject({
-        method: 'POST',
+        method: 'PUT',
         url: '/threads/thread-123/comments/comment-123/likes',
         headers: {
           Authorization: `Bearer ${responseAuth.data.accessToken}`,
@@ -631,7 +631,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
 
       // Action
       const response = await server.inject({
-        method: 'POST',
+        method: 'PUT',
         url: `/threads/${threadJson.data.addedThread.id}/comments/comment-123/likes`,
         headers: {
           Authorization: `Bearer ${responseAuth.data.accessToken}`,
@@ -699,7 +699,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
 
       // Action
       const response = await server.inject({
-        method: 'POST',
+        method: 'PUT',
         url: `/threads/${threadJson.data.addedThread.id}/comments/${commentJson.data.addedComment.id}/likes`,
         headers: {
           Authorization: `Bearer ${responseAuth.data.accessToken}`,
@@ -765,7 +765,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
       const commentJson = JSON.parse(responseAddComment.payload);
 
       await server.inject({
-        method: 'POST',
+        method: 'PUT',
         url: `/threads/${threadJson.data.addedThread.id}/comments/${commentJson.data.addedComment.id}/likes`,
         headers: {
           Authorization: `Bearer ${responseAuth.data.accessToken}`,
@@ -774,7 +774,7 @@ describe('/threads/{threadId}/comments endpoint', () => {
 
       // Action
       const response = await server.inject({
-        method: 'POST',
+        method: 'PUT',
         url: `/threads/${threadJson.data.addedThread.id}/comments/${commentJson.data.addedComment.id}/likes`,
         headers: {
           Authorization: `Bearer ${responseAuth.data.accessToken}`,

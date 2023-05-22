@@ -15,6 +15,14 @@ const routes = (handler) => ([
       auth: 'forumapi_jwt',
     },
   },
+  {
+    method: 'PUT',
+    path: '/threads/{threadId}/comments/{commentId}/likes',
+    handler: handler.putLikeDislikeCommentHandler,
+    options: {
+      auth: 'forumapi_jwt',
+    },
+  },
 
 ]);
 
